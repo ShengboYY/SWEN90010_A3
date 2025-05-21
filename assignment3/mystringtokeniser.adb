@@ -21,6 +21,9 @@ package body MyStringTokeniser with SPARK_Mode is
                    Tokens(J).Length > 0) and then
             Tokens(J).Length-1 <= S'Last - Tokens(J).Start);
 
+         -- The loop invariant here means in each loop, the outindex should correctly keep track of processed tokens
+         -- and all tokens should be processed in a correct order.
+         -- Without this loop invariant, the SPARK can not prove that Count(Count := Processed) is equal to actual number of tokens in the Tokens array.
          pragma Loop_Invariant (OutIndex = Tokens'First + Processed);
 
          -- look for start of next token
