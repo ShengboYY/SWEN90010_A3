@@ -104,10 +104,10 @@ package body Calculator is
       elsif First_Token = "-" then
          Outcome := Long_Integer(Number1) - Long_Integer(Number2);
       elsif First_Token = "*" then
-         Outcome := Long_Integer(Number2) * Long_Integer(Number2);
+         Outcome := Long_Integer(Number1) * Long_Integer(Number2);
       elsif First_Token = "/" then
          if Number2 /= 0 then
-            Outcome := Long_Integer(Number2) / Long_Integer(Number2);
+            Outcome := Long_Integer(Number1) / Long_Integer(Number2);
          else
             Put_Line("Division by zero is not allowed!");
          end if;
