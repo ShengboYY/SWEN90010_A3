@@ -31,7 +31,4 @@ private
    function Size(S : in Stack) return Integer is
      (S.size);
 
-   function Storage(S : in Stack; Pos : in Integer) return Item is
-      (S.storage(Pos));
-
 end Stack;

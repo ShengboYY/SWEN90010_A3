@@ -21,4 +21,9 @@ package body Stack is
       S.size := S.size - 1;
    end Pop;
 
+   function Storage(S : in Stack; Pos : in Integer) return Item is
+   begin
+      return S.storage(Pos);
+   end Storage;
+
 end Stack;

@@ -33,27 +33,52 @@ begin
       loop 
          Lines.Get_Line(S);  
          -- Each input should not exceed 2048 characters
-         if Lines.Length(S) > 2048 then
+         if Lines.Length(S) > 2048 or Lines.Length(S) <= 0 then
             Put_Line("Invalid command!");
             exit;
          end if;
-          
-      declare
-         T : MyStringTokeniser.TokenArray(1..5) := (others => (Start => 1, Length => 0));
-         NumTokens : Natural; 
-         locked : Boolean := Calculator.Get_State(Cal);
-      begin
-         -- Split command into tokens   
-         MyStringTokeniser.Tokenise(Lines.To_String(S),T,NumTokens);
-         if NumTokens > 3 then
-            Put_Line("You entered too many tokens");
-            exit;
-         else
-           declare
+         declare
+            T : MyStringTokeniser.TokenArray(1..5) := (others => (Start => 1, Length => 0));
+            NumTokens : Natural; 
+            locked : Boolean := Calculator.Get_State(Cal);
+         begin
+            -- Split command into tokens  
+            MyStringTokeniser.Tokenise(Lines.To_String(S),T,NumTokens);
+            if NumTokens > 3 then
+               Put_Line("You entered too many tokens");
+               exit;
+            elsif NumTokens <= 0 then
+               Put_Line("Empty command!");
+               exit;
+            else
+               declare
+                  Valid : Boolean := True;
+               begin
+                  for I in 1 .. NumTokens loop
+                     declare
+                        Start_Pos : Positive := T(I).Start;
+                        End_Pos   : Positive := T(I).Start + T(I).Length - 1;
+                     begin
+                        if Start_Pos < 1 or else 
+                          End_Pos < Start_Pos or else 
+                          End_Pos > Lines.Length(S) 
+                        then
+                           Valid := False;
+                           exit;
+                        end if;
+                     end;
+                  end loop;
+
+                  if not Valid then
+                     Put_Line("Invalid token positions detected!");
+                     exit;  
+                  end if;      
+               end;
+               declare
                   First_Token : String := Lines.To_String(Lines.Substring(S,T(1).Start,T(1).Start+T(1).Length-1));
-           begin
-                if locked then
-                   -- If the calculator is locked, the user should unlock it before entring other commands
+               begin
+                  if locked then  
+                     -- If the calculator is locked, the user should unlock it before entring other commands
                      if First_Token /= "unlock" then
                         -- If the command is "lock <NUMBER>", nothing happens
                         if First_Token /= "lock" then
@@ -69,7 +94,8 @@ begin
                            exit;
                         end if;
                      end if;
-               else
+               
+                  else
                      -- When the calculator is unlocked
                      -- If the command is "unlock <NUMBER>", nothing happens
                      if First_Token /= "unlock" then
@@ -113,17 +139,12 @@ begin
                            exit;
                         end if;
                      end if;
-                     
-               end if;   
-            end;  
-         end if;
-      end;
-      
-      Calculator.Check_Locked(Cal); 
-      
+                  end if;   
+               end;  
+            end if;
+         end;
+         Calculator.Check_Locked(Cal); 
       end loop;
-
    end if;
-     
 end Main;
 
