@@ -12,12 +12,23 @@ package body Stack is
 
    procedure Push(S : in out Stack; I : in Item) is
    begin
+      -- Prevent Stack Overflow
+      if (S.size >= Max_Size) then
+         Put_Line("Stack is full!");
+         return;
+      end if;
       S.size := S.size + 1;
       S.storage(S.size) := I;
    end Push;
 
    procedure Pop(S : in out Stack; I : out Item) is
    begin
+      -- Prevent Poping From A Empty Stack
+      if (S.size = 0) then
+         I := Default_Item;
+         Put_Line("Stack is empty");
+         return;
+      end if;
       I := S.storage(S.size);
       S.size := S.size - 1;
    end Pop;

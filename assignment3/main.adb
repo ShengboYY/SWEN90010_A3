@@ -1,3 +1,11 @@
+
+--    can only ever be performed when the calculator is in the unlocked state.
+-- 2. The Unlock operation can only ever be performed when the calculator is in the locked state.
+-- 3. The Lock operation, when it is performed, should update the master PIN with the new PIN
+--    that is supplied
+-- 4. Stack Overflow
+-- 5. 
+
 pragma SPARK_Mode (On);
 
 with MyCommandLine;
@@ -51,11 +59,13 @@ begin
                Put_Line("Empty command!");
                exit;
             else
+               
                -- Check All Tokens
                declare
                   Valid : Boolean := True;
                begin
                   for I in 1 .. NumTokens loop
+                     pragma Loop_Invariant(I >= 1 and I <= NumTokens and Valid = True);
                      declare
                         Start_Pos : Positive := T(I).Start;
                         End_Pos   : Positive := T(I).Start + T(I).Length - 1;
@@ -70,11 +80,13 @@ begin
                      end;
                   end loop;
 
-                  if not Valid then
+                  if Valid = False then
                      Put_Line("Invalid token positions detected!");
                      exit;  
-                  end if;      
+                  end if;
+                  pragma Assert(Valid = True);
                end;
+               
                declare
                   First_Token : String := Lines.To_String(Lines.Substring(S,T(1).Start,T(1).Start+T(1).Length-1));
                begin
