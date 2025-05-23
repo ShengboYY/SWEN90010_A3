@@ -159,6 +159,10 @@ begin
                               exit;
                            end if;
                         elsif NumTokens = 3 then
+                           -- arithmetic operation after push2 x y is y operand x 
+                           -- e.g. >push2 7 3
+                           --      >-
+                           -- equals to 3-7
                            if First_Token = "push2" then
                               Calculator.Push(Cal, Lines.To_String(Lines.Substring(S,T(2).Start,T(2).Start+T(2).Length-1)));
                               Calculator.Push(Cal, Lines.To_String(Lines.Substring(S,T(3).Start,T(3).Start+T(3).Length-1)));
