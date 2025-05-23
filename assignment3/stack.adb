@@ -23,7 +23,7 @@ package body Stack is
 
    procedure Pop(S : in out Stack; I : out Item) is
    begin
-      -- Prevent Poping From A Empty Stack
+      -- Prevent Stack Underflow
       if (S.size = 0) then
          I := Default_Item;
          Put_Line("Stack is empty");

@@ -101,7 +101,7 @@ begin
                   end loop;
 
                   if Valid = False then
-                     Put_Line("Invalid token positions detected!");
+                     Put_Line("Invalid token detected!");
                      exit;  
                   end if;
                   pragma Assert(Valid = True);
