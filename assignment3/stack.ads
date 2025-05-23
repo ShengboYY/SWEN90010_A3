@@ -17,12 +17,12 @@ package Stack with SPARK_Mode is
    -- Check if the item is pushed into the stack
    procedure Push(S : in out Stack; I : in Item) with
      Pre => Size(S) < Max_Size,
-     Post => Size(S) = Size(S'Old) + 1;
+     Post => Size(S) = Size(S'Old) + 1 and Storage(S, Size(S)) = I;
 
    -- Check if the top item is popped out
    procedure Pop(S : in out Stack; I : out Item) with
      Pre => Size(S) > 0,
-     Post => Size(S) = Size(S'Old) - 1;
+     Post => Size(S) = Size(S'Old) - 1 and I = Storage(S'Old, Size(S'Old));
 
    function Size(S : in Stack) return Integer;
 

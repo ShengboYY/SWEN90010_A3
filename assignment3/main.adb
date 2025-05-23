@@ -1,10 +1,30 @@
-
---    can only ever be performed when the calculator is in the unlocked state.
--- 2. The Unlock operation can only ever be performed when the calculator is in the locked state.
--- 3. The Lock operation, when it is performed, should update the master PIN with the new PIN
---    that is supplied
--- 4. Stack Overflow
--- 5. 
+-- 1. The arithmetic operations ("+", "-", "*", "/"), pop, load, store, remove, and lock 
+--    operations can only ever be performed when the calculator is in the unlocked state.
+--    In calculator.ads, a precondition checking if the calculator is unlocked for each of 
+--    the arithmetic operations, pop, load, store, remove and lock procedures. So it needs 
+--    to be unlocked to invoke the procedures.
+-- 2. The Unlock operation can only ever be performed when the calculator is in the locked 
+--    state.
+--    In calculator.ads, a precondition checking if the calculator is locked for the Unlock 
+--    procedure.
+-- 3. The Lock operation, when it is performed, should update the master PIN with the new 
+--    PIN that is supplied.
+--    In calculator.ads, a postcondition checking if the calculator is locked with a PIN 
+--    equal to the input PIN is added to the Lock procedure.
+-- 4. The calculator can only be unlocked with the right PIN.
+--    In calculator.ads, a post condition is added to the Unlock procedure. It checks the 
+--    calculator is unlocked only if the input PIN is equal to the setted PIN, otherwise 
+--    it is still locked.
+-- 5. Stack overflow will not occur when pushing a item into a full stack.
+--    In stack.ads, a precondition checking if the stack is not full is added to the Push 
+--    procedure so a item will not be pushed into a full stack.
+-- 6. Stack underflow will not occur when popping a item out of a empty stack.
+--    In stack.ads, a precondition checking if the stack is not empty is added to the Pop 
+--    procedure so a empty stack cannot do Pop.
+-- 7. Pop and push correctly changes the stack, such that a item will not remain in the 
+--    stack after popping and a item will stay on the top of the stack after pushing.
+--    In stack.ads, postconditions are added to Push and Pop procedures to check popped item 
+--    was the item on the top and the item on the top of the item is the pushed item respectively.
 
 pragma SPARK_Mode (On);
 
@@ -60,7 +80,7 @@ begin
                exit;
             else
                
-               -- Check All Tokens
+               -- Check if all Tokens are valid 
                declare
                   Valid : Boolean := True;
                begin
