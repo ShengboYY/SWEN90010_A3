@@ -51,6 +51,7 @@ begin
                Put_Line("Empty command!");
                exit;
             else
+               -- Check All Tokens
                declare
                   Valid : Boolean := True;
                begin

@@ -10,15 +10,21 @@ package Stack with SPARK_Mode is
 
    type Stack is private;
 
-   procedure Init(S : out Stack);
+   procedure Init(S : out Stack) with
+     Post => Size(S) = 0;
 
-   procedure Push(S : in out Stack; I : in Item);
+   procedure Push(S : in out Stack; I : in Item) with
+     Pre => Size(S) < Max_Size,
+     Post => Size(S) = Size(S'Old) + 1;
 
-   procedure Pop(S : in out Stack; I : out Item);
+   procedure Pop(S : in out Stack; I : out Item) with
+     Pre => Size(S) > 0,
+     Post => Size(S) = Size(S'Old) - 1;
 
    function Size(S : in Stack) return Integer;
 
-   function Storage(S : in Stack; Pos : in Integer) return Item;
+   function Storage(S : in Stack; Pos : in Integer) return Item with
+     Pre => Pos > 0 and Pos <= Size(S);
 
 private
    type Storage_Array is array(1..Max_Size) of Item;
@@ -30,5 +36,8 @@ private
 
    function Size(S : in Stack) return Integer is
      (S.size);
+
+   function Storage(S : in Stack; Pos : in Integer) return Item is
+      (S.storage(Pos));
 
 end Stack;
