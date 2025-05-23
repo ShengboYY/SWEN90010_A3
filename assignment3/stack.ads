@@ -10,19 +10,23 @@ package Stack with SPARK_Mode is
 
    type Stack is private;
 
+   -- Check if it is initialised
    procedure Init(S : out Stack) with
      Post => Size(S) = 0;
 
+   -- Check if the item is pushed into the stack
    procedure Push(S : in out Stack; I : in Item) with
      Pre => Size(S) < Max_Size,
      Post => Size(S) = Size(S'Old) + 1;
 
+   -- Check if the top item is popped out
    procedure Pop(S : in out Stack; I : out Item) with
      Pre => Size(S) > 0,
      Post => Size(S) = Size(S'Old) - 1;
 
    function Size(S : in Stack) return Integer;
 
+   -- Check if the S.storage(Pos) is defined
    function Storage(S : in Stack; Pos : in Integer) return Item with
      Pre => Pos > 0 and Pos <= Size(S);
 

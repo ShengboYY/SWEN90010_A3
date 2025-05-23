@@ -48,6 +48,11 @@ package body Calculator is
    -- Command: unlock
    procedure Unlock(Cal : in out Calculator; Input_PIN : in String) is
    begin
+      if not Cal.locked then
+         Put_Line("The Calculator is already unlocked!");
+         return;
+      end if;
+
       if Check_PIN_Validation(Input_PIN) then
          if PIN."="(Cal.Master_PIN, PIN.From_String(Input_PIN)) then
             Cal.locked := False;
@@ -61,6 +66,11 @@ package body Calculator is
    -- Command: lock
    procedure Lock(Cal : in out Calculator; New_PIN : in String) is
    begin
+      if Cal.locked then
+         Put_Line("The Calculator is already locked!");
+         return;
+      end if;
+
       if Check_PIN_Validation(New_PIN) then
          Cal.locked := True;
          Cal.Master_PIN := PIN.From_String(New_PIN);
@@ -173,7 +183,7 @@ package body Calculator is
          Number := Integer(Int32_Number);
          SS.push(Cal.stack, Number);
       else
-         Put_Line("Invalid location!");
+         Put_Line("Undefined memory location!");
       end if;
    end LoadFrom;
 
@@ -191,7 +201,7 @@ package body Calculator is
       if MemoryStore.Has(Cal.memeory, Location) then
          MemoryStore.Remove(Cal.memeory, Location);
       else
-         Put_Line("Invalid location!");
+         Put_Line("Undefined memory location!");
       end if;
    end Remove;
 
