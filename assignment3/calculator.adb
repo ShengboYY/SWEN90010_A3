@@ -88,7 +88,9 @@ package body Calculator is
    procedure Arithmetic_Operation(Cal : in out Calculator; First_Token : in String) is
       Number1 : Integer;
       Number2 : Integer;
-      Outcome : Long_Integer;
+      Long1 : Long_Long_Integer;
+      Long2 : Long_Long_Integer;
+      Outcome : Long_Long_Integer;
    begin
       -- More than 2 elements in the stack is necessary for arithmetic operation
       if SS.Size(Cal.stack) < 2 then
@@ -99,26 +101,33 @@ package body Calculator is
       SS.Pop(Cal.stack, Number1);
       SS.Pop(Cal.stack, Number2);
 
+      -- Prevent Integer Overflow
+      Long1 := Long_Long_Integer(Number1);
+      Long2 := Long_Long_Integer(Number2);
+
       if First_Token = "+" then
-         Outcome := Long_Integer(Number1) + Long_Integer(Number2);
+         Outcome := Long1 + Long2;
       elsif First_Token = "-" then
-         Outcome := Long_Integer(Number1) - Long_Integer(Number2);
+         Outcome := Long1 - Long2;
       elsif First_Token = "*" then
-         Outcome := Long_Integer(Number1) * Long_Integer(Number2);
+         Outcome := Long1 * Long2;
       elsif First_Token = "/" then
-         if Number2 /= 0 then
-            Outcome := Long_Integer(Number1) / Long_Integer(Number2);
+         if Long2 /= 0 then
+            Outcome := Long1 / Long2;
          else
             Put_Line("Division by zero is not allowed!");
+            return;
          end if;
+      else
+         Put_Line("Invalid Arithmetic Operand!");
       end if;
 
       -- If the outcome is outside the range -2_147_483_648 .. 2_147_483_647,
       -- the operation will not be performed
-      if Outcome < 2_147_483_647 and Outcome > -2_147_483_648 then
+      if Outcome <= 2_147_483_647 and Outcome >= -2_147_483_648 then
          SS.Push(Cal.stack,Integer(Outcome));
       else
-         Put_Line("Operation failed!");
+         Put_Line("Operation failed! Result Overflow!");
          SS.Push(Cal.stack, Number2);
          SS.Push(Cal.stack, Number1);
       end if;
@@ -132,7 +141,12 @@ package body Calculator is
    begin
       SS.Pop(Cal.stack, Number);
       Int32_Number := MemoryStore.Int32(Number);
-      MemoryStore.Put(Cal.memeory, StringToInteger.From_String(Loc), Int32_Number);
+      -- Check Input Memory Location
+      if (StringToInteger.From_String(Loc) in 1..MemoryStore.Max_Locations) then
+         MemoryStore.Put(Cal.memeory, StringToInteger.From_String(Loc), Int32_Number);
+      else
+         Put_Line("Invalid location!");
+      end if;
    end StoreTo;
 
    -- Command: list
@@ -147,6 +161,12 @@ package body Calculator is
       Number : Integer;
       Int32_Number : MemoryStore.Int32;
    begin
+      -- Check Input Memory Location
+      if (StringToInteger.From_String(Loc) not in 1..MemoryStore.Max_Locations) then
+         Put_Line("Invalid location!");
+         return;
+      end if;
+
       Location := MemoryStore.Location_Index(StringToInteger.From_String(Loc));
       if MemoryStore.Has(Cal.memeory, Location) then
          Int32_Number := MemoryStore.Get(Cal.memeory, Location);
@@ -161,6 +181,12 @@ package body Calculator is
    procedure Remove(Cal: in out Calculator; Loc : in String) is
       Location : MemoryStore.Location_Index;
    begin
+      -- Check Input Memory Location
+      if (StringToInteger.From_String(Loc) not in 1..MemoryStore.Max_Locations) then
+         Put_Line("Invalid location!");
+         return;
+      end if;
+
       Location := MemoryStore.Location_Index(StringToInteger.From_String(Loc));
       if MemoryStore.Has(Cal.memeory, Location) then
          MemoryStore.Remove(Cal.memeory, Location);
