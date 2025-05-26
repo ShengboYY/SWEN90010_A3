@@ -1,3 +1,4 @@
+-- Authors: Shengbo Yuan, Yuk Hang Cheng
 -- 1. The arithmetic operations ("+", "-", "*", "/"), pop, load, store, remove, and lock 
 --    operations can only ever be performed when the calculator is in the unlocked state.
 --    In calculator.ads, a precondition checking if the calculator is unlocked for each of 
