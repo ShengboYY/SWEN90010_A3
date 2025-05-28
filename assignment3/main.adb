@@ -25,7 +25,7 @@
 -- 7. Pop and push correctly changes the stack, such that a item will not remain in the 
 --    stack after popping and a item will stay on the top of the stack after pushing.
 --    In stack.ads, postconditions are added to Push and Pop procedures to check popped item 
---    was the item on the top and the item on the top of the item is the pushed item respectively.
+--    was the item on the top or the item on the top of is the pushed item respectively.
 
 pragma SPARK_Mode (On);
 
